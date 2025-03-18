@@ -20,7 +20,7 @@ async function main(mac_addresses_path: string, log_path: string): Promise<numbe
   const mac_address_file = read_mac_address_file(mac_addresses_path);
   if(mac_address_file.is_err()) {
     error(mac_address_file.unwrap_err());
-    fs.writeFileSync(log_path, logs);
+    log_path && fs.writeFileSync(log_path, logs);
     return ERROR_CODES.NO_MAC_ADDRESSES;
   }
   info("File read succesfully");
@@ -37,7 +37,7 @@ async function main(mac_addresses_path: string, log_path: string): Promise<numbe
   const wakeonlan_exists = await check_for_wakeonlan();
   if(wakeonlan_exists.is_some()) {
     error("wakeonlan does not exist");
-    fs.writeFileSync(log_path, logs);
+    log_path && fs.writeFileSync(log_path, logs);
     return ERROR_CODES.NO_WAKEONLAN;
   }
   info("`wakeonlan` exists. Continuing");
