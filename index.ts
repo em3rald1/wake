@@ -7,7 +7,8 @@ import { exec } from "child_process";
 const ERROR_CODES = {
   SUCCESS: 0,
   NO_MAC_ADDRESSES: 1,
-  NO_WAKEONLAN: 2
+  NO_WAKEONLAN: 2,
+  NO_ARGS: 3
 };
 
 async function main(mac_addresses_path: string, log_path: string): Promise<number> {
@@ -102,7 +103,10 @@ function run_single_wakeonlan(mac_address: string): Promise<Option<WakeOnLanErro
 }
 
 (async() => {
-  if(process.argv.length < 3) construct_logger({ "logger": console.log, "colors_support": true }).error("Usage: yarn start <nmap-dump-path> [log-path]")
+  if(process.argv.length < 3) {
+    construct_logger({ "logger": console.log, "colors_support": true }).error("Usage: yarn start <nmap-dump-path> [log-path]");
+    process.exit(ERROR_CODES.NO_ARGS);
+  }
   const nmap_dump = process.argv[2];
   const log_path = process.argv[3];
 
